@@ -48,7 +48,7 @@ while True:
             elif pg.mouse.get_pressed()[2]:
                 l1, l2 = pg.mouse.get_pos()
                 l1, l2 = (l1 // 50, l2 // 50)
-                if not flags[l1][l2]:
+                if not flags[l1][l2] and not g2[l1][l2]:
                     flags[l1][l2] = 1
                 else:
                     flags[l1][l2] = 0
