@@ -47,16 +47,18 @@ while True:
             if pg.mouse.get_pressed()[0]:
                 l1, l2 = pg.mouse.get_pos()
                 l1, l2 = (l1//50, l2//50)
-                if g[l1][l2] == '*':
-                    for c in range(0, len(g)):
-                        for r in range(0, len(g[0])):
-                            if g[c][r] == '*':
-                                g2[c][r] = 1
-                                flags[c][r] = 0
+
                 if not flags[l1][l2]:
-                    g2[l1][l2] = 1
-                    if g[l1][l2] == 0:
-                        snake(g, g2)
+                    if g[l1][l2] == '*':
+                        for c in range(0, len(g)):
+                            for r in range(0, len(g[0])):
+                                if g[c][r] == '*':
+                                    g2[c][r] = 1
+                                    flags[c][r] = 0
+                    else:
+                        g2[l1][l2] = 1
+                        if g[l1][l2] == 0:
+                            snake(g, g2)
             elif pg.mouse.get_pressed()[2]:
                 l1, l2 = pg.mouse.get_pos()
                 l1, l2 = (l1 // 50, l2 // 50)
