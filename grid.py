@@ -15,8 +15,9 @@ def get_square(grid, c, r):
 
 
 def place_bomb(grid):
-    r = random.randint(0, len(grid) - 1)
     c = random.randint(0, len(grid) - 1)
+    r = random.randint(0, len(grid[0]) - 1)
+
     if get_square(grid, c, r) != '*':
         grid[c][r] = '*'
         add_numbers(grid, c, r)
@@ -64,6 +65,12 @@ def make_grid(grid_width, grid_height, num_of_bombs):
     grid = generate_grid(grid_width, grid_height)
     for i in range(num_of_bombs):
         place_bomb(grid)
+        #for line in grid:
+        #    l = ''
+        #    for square in line:
+        #        l = f'{l}  {square}'
+        #    print(l)
+        #print('\n\n\n')
     return grid
 
 
@@ -116,10 +123,11 @@ def place_zeros(grid, v, c, r):
     if c < h and r < w:
         v[c + 1][r + 1] = 1
     return v
+
 if __name__ == '__main__':
     grid_width = 16
-    grid_height = 16
-    num_of_bombs = 40
+    grid_height = 32
+    num_of_bombs = 80
 
     grid = generate_grid(grid_width, grid_height)
 
