@@ -124,6 +124,14 @@ def place_zeros(grid, v, c, r):
         v[c + 1][r + 1] = 1
     return v
 
+def check_if_won(grid, flagnum, visible):
+    if flagnum > 0:
+        return False
+    for c in range(len(grid[0])):
+        for r in range(len(grid)):
+            if grid[c][r] != '*' and not visible[c][r]:
+                return False
+    return True
 if __name__ == '__main__':
     grid_width = 16
     grid_height = 32
