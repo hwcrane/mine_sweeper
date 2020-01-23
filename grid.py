@@ -79,56 +79,84 @@ def make_blank_grid(grid_width, grid_height, num_of_bombs):
     return grid
 
 
-def snake(grid, visible):
+def snake(grid, visible, flags, flagcount):
     v2 = copy.deepcopy(visible)
     for c in range(len(grid)):
         for r in range(len(grid[0])):
             if visible[c][r] and grid[c][r] == 0:
-                visible = place_zeros(grid, visible, c, r)
+                visible, flagcount = place_zeros(grid, visible, c, r, flags, flagcount)
 
     if visible != v2:
-        snake(grid, visible)
-def place_zeros(grid, v, c, r):
+        flagcount = snake(grid, visible, flags, flagcount)
+
+    return flagcount
+
+def place_zeros(grid, v, c, r, flags, flagcount):
     h = len(grid) - 1
     w = len(grid[0]) - 1
     # center left
     if r > 0:
         v[c][r - 1] = 1
+        if flags[c][r-1]:
+            flags[c][r-1] = 0
+            flagcount += 1
 
     # center right
     if r < w:
         v[c][r + 1] = 1
+        if flags[c][r+1]:
+            flags[c][r+1] = 0
+            flagcount += 1
 
     # upper left
     if c > 0 and r > 0:
         v[c - 1][r - 1] = 1
+        if flags[c-1][r-1]:
+            flags[c-1][r-1] = 0
+            flagcount += 1
 
     # upper middle
     if c > 0:
         v[c - 1][r] = 1
+        if flags[c-1][r]:
+            flags[c-1][r] = 0
+            flagcount += 1
 
     # upper right
     if c > 0 and r < w:
         v[c - 1][r + 1] = 1
+        if flags[c-1][r+1]:
+            flags[c-1][r+1] = 0
+            flagcount += 1
 
     # lower left
     if c < h and r > 0:
         v[c + 1][r - 1] = 1
+        if flags[c+1][r-1]:
+            flags[c+1][r-1] = 0
+            flagcount += 1
 
     # lower middle
     if c < h:
         v[c + 1][r] = 1
+        if flags[c+1][r]:
+            flags[c+1][r] = 0
+            flagcount += 1
 
     # lower right
     if c < h and r < w:
         v[c + 1][r + 1] = 1
-    return v
+        if flags[c+1][r+1]:
+            flags[c+1][r+1] = 0
+            flagcount += 1
+
+    return v, flagcount
 
 def check_if_won(grid, flagnum, visible):
     if flagnum > 0:
         return False
-    for c in range(len(grid[0])):
-        for r in range(len(grid)):
+    for c in range(len(grid)):
+        for r in range(len(grid[0])):
             if grid[c][r] != '*' and not visible[c][r]:
                 return False
     return True

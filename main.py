@@ -3,7 +3,8 @@ import pygame as pg
 
 pg.init()
 win = pg.display.set_mode((1650, 1000))
-
+pg.display.set_caption('Mine_Sweeper', './assets/icon.png')
+pg.display.set_icon(pg.image.load('./assets/icon.png'))
 tile = pg.transform.scale(pg.image.load('./assets/tile.png'), (50, 50))
 bgtile = pg.transform.scale(pg.image.load('./assets/bg_tile.png'), (50, 50))
 red_tile = pg.transform.scale(pg.image.load('./assets/red_tile.png'), (50, 50))
@@ -28,10 +29,15 @@ clock = pg.time.Clock()
 pg.time.set_timer(pg.USEREVENT, 1000)
 play = True
 start = False
+lost = False
 
 
 def printgrid():
-    win.blit(background, (0, 0))
+    global lost
+    if not lost:
+        win.blit(background, (0, 0))
+    else:
+        win.blit(sad_background, (0, 0))
     if flagcount // 10 == 0:
         flagprifix = '00'
     elif flagcount // 10 == 1:
@@ -56,16 +62,17 @@ def printgrid():
         for r in range(0, len(g[0])):
             if flags[c][r] == 3:
                 win.blit(red_tile, ((c * 50) + 25, (r * 50) + 175))
+                lost = True
             else:
                 win.blit(bgtile, ((c * 50) + 25, (r * 50) + 175))
-            if (t := g[c][r]) != 0:
-                if t == '*':
+            if g[c][r] != 0:
+                if g[c][r] == '*':
                     win.blit(mine, ((c * 50) + 25, (r * 50) + 175))
                 else:
                     if flags[c][r] == 4:
                         win.blit(incorrect_mine, ((c * 50) + 25, (r * 50) + 175))
                     else:
-                        win.blit(font.render(f'{t}', True, fontcols[t]), ((c * 50) + 35, (r * 50) + 177))
+                        win.blit(font.render(f'{g[c][r]}', True, fontcols[g[c][r]]), ((c * 50) + 35, (r * 50) + 177))
             if not g2[c][r]:
                 win.blit(tile, ((c * 50) + 25, (r * 50) + 175))
             if flags[c][r] == 1:
@@ -94,6 +101,7 @@ while True:
                     timer = 0
                     play = True
                     start = False
+                    lost = False
                 elif 25 < l1 < 1625 and 175 < l2 < 975 and play:
                     if not start:
                         start = True
@@ -117,7 +125,7 @@ while True:
                         else:
                             g2[l1][l2] = 1
                             if g[l1][l2] == 0:
-                                snake(g, g2)
+                                flagcount = snake(g, g2, flags, flagcount)
             elif pg.mouse.get_pressed()[2]:
                 l1, l2 = pg.mouse.get_pos()
                 if 25 < l1 < 1625 and 175 < l2 < 975 and play and start:
@@ -127,11 +135,11 @@ while True:
                     if not flags[l1][l2] and not g2[l1][l2] and flagcount > 0:
                         flags[l1][l2] = 1
                         flagcount -= 1
+                        if check_if_won(g, flagcount, g2):
+                            play = False
                     elif flags[l1][l2]:
                         flags[l1][l2] = 0
                         flagcount += 1
-                        if check_if_won(g, flagcount, g2):
-                            play = False
 
     printgrid()
 
