@@ -1,3 +1,15 @@
 # mine_sweeper
-mine sweeper game created in pygame<br>
-run 'main.py' to begin
+
+![image](./assets/screenshot.png)
+
+# Description
+
+Mine sweeper created created using python and pygame
+
+# Running
+
+Run using the command:
+
+```bash
+python main.py
+```
