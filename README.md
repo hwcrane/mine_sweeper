@@ -1,10 +1,10 @@
 # mine_sweeper
 
-![image](./assets/screenshot.png)
-
 # Description
 
 Mine sweeper created created using python and pygame
+
+![image](./assets/screenshot.png)
 
 # Running
 
